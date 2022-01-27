@@ -16,7 +16,15 @@ export XDG_PROJECTS_DIR="${XDG_PROJECTS_DIR:-$HOME/Projects}"
 export DUMPFILE_HOME="$DOTFILES_HOME/.dumpfile"
 export HISTFILE_HOME="$DOTFILES_HOME/.histfile"
 
+export DOTFILES_PYTHON_HOME="$DOTFILES_HOME/python"
+export DOTFILES_PYTHON_SCRIPT="$DOTFILES_PYTHON_HOME/script"
+
 # Code
 export CODE_HOME="${CODE_HOME:-$HOME/code}"
 export CODE_LOCAL="$CODE_HOME/.local"
 export CODE_BIN="$CODE_LOCAL/global_bin"
+
+# Python venv
+export PYVENV_HOME="$CODE_HOME/.pyvenv"
+export PYVENV_LOCAL="$PYVENV_HOME/.local"
+export PYVENV_BIN="$PYVENV_LOCAL/global_bin"
