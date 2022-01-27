@@ -1,0 +1,19 @@
+pyvenv() {
+  if [[ -z "$1" ]]; then
+    echo "$0: missing action"
+    (exit 1)
+  elif [[ "$1" == "on" ]]; then
+    if [[ -z "$2" ]]; then
+      echo "$0: missing name"
+      (exit 1)
+    elif [[ "$2" != "local" ]]; then
+      source "$PYVENV_HOME/$2/bin/activate"
+    else
+      source "$PYVENV_LOCAL/bin/activate"
+    fi
+  elif [[ "$1" == "off" ]]; then
+    deactivate
+  else
+    pyvenv.py "${@}"
+  fi
+}
