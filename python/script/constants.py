@@ -17,3 +17,8 @@ CODE_BIN = Path(os.environ["CODE_BIN"])
 PYVENV_HOME = Path(os.environ["PYVENV_HOME"])
 PYVENV_LOCAL = Path(os.environ["PYVENV_LOCAL"])
 PYVENV_BIN = Path(os.environ["PYVENV_BIN"])
+
+SSH_HOME = HOME / ".ssh"
+SSH_KEY = SSH_HOME / "key"
+SSH_CONFIG_DIR = SSH_HOME / "config_dir"
+DOTFILES_SSH_HOME = Path(os.environ["DOTFILES_SSH_HOME"])

@@ -1,0 +1,7 @@
+{
+  "AddKeysToAgent": true,
+  "IdentitiesOnly": true,
+  "UseKeychain": true,
+  "hostname": "github.com",
+  "postfix": "personal"
+}
