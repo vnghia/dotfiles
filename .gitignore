@@ -287,3 +287,6 @@ zsdoc/data
 
 # Histfile directory
 .histfile/
+
+# Everything has .local
+**/*.local.*
