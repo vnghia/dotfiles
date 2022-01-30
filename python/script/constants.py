@@ -4,6 +4,8 @@ from pathlib import Path
 HOME = Path.home()
 
 DOTFILES_HOME = Path(os.environ["DOTFILES_HOME"])
+DUMPFILE_HOME = Path(os.environ["DUMPFILE_HOME"])
+HISTFILE_HOME = Path(os.environ["HISTFILE_HOME"])
 
 DOTFILES_PYTHON_HOME = Path(os.environ["DOTFILES_PYTHON_HOME"])
 DOTFILES_PYTHON_SCRIPT = Path(os.environ["DOTFILES_PYTHON_SCRIPT"])
