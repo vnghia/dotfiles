@@ -1,3 +1,6 @@
+# Git custom command
+export PATH="$DOTFILES_GIT_HOME:$PATH"
+
 # Python binary
 export PATH="$PYVENV_BIN:$PATH"
 
