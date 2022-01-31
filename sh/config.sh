@@ -15,6 +15,15 @@ export PIP_REQUIRE_VIRTUALENV="true"
 # Git
 export GIT_CONFIG_GLOBAL="$DOTFILES_GIT_HOME/.gitconfig"
 
+# System command
+
+## ls with color (https://geoff.greer.fm/lscolors/)
+export CLICOLOR=1
+# MacOS / FreeBSD
+export LSCOLORS="gxfxbxdxcxegedabagacad"
+# GNU Linux
+export LS_COLORS="di=36:ln=35:so=31:pi=33:ex=32:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+
 # Alias
 source "$DOTFILES_SHELL_HOME/alias.sh"
 
