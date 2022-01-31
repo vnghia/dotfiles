@@ -28,5 +28,8 @@ source $ZSH/oh-my-zsh.sh
 # Powerlevel10k
 source $ZDOTDIR/.p10k.zsh
 
+# Hightlight
+source $ZDOTDIR/.highlight.zsh
+
 # Source config in the end !
 source "$ZDOTDIR/config.zsh"
