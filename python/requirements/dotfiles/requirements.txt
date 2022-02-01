@@ -1,1 +1,2 @@
 # dotfiles
+rich==11.1.0
