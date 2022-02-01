@@ -11,6 +11,7 @@ export LC_ALL="en_US.UTF-8"
 
 # Python
 export PIP_REQUIRE_VIRTUALENV="true"
+export PYTHONSTARTUP="$DOTFILES_PYTHON_SCRIPT/pythonrc.py"
 
 # Git
 export GIT_CONFIG_GLOBAL="$DOTFILES_GIT_HOME/.gitconfig"
