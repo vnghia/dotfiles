@@ -68,11 +68,11 @@ class __PYTHONRC__:
         )
         common_modules = self.__import_modules(
             {
-                "numpy": "np",
-                "numpy.linalg": "npl",
-                "matplotlib.pyplot": "plt",
-                "scipy": "sci",
-                "pandas": "pd",
+                "numpy": ("np", None),
+                "numpy.linalg": ("npl", None),
+                "matplotlib.pyplot": ("plt", None),
+                "scipy": ("sci", None),
+                "pandas": ("pd", None),
             }
         )
         if len(common_modules):
@@ -128,10 +128,12 @@ class __PYTHONRC__:
 
     def __import_modules(self, modules):
         imported = []
-        for module, name in modules.items():
+        for module, (name, root) in modules.items():
             import_str = f"import {module}"
             if name:
                 import_str += f" as {name}"
+            if root:
+                import_str = f"from {root} " + import_str
             try:
                 exec(import_str, globals())
             except ImportError:
