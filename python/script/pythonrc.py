@@ -39,44 +39,6 @@ from rich.pretty import pprint
 from rich.table import Table
 from rich.text import Text
 
-# Try importing some common modules
-common_modules = []
-try:
-    import numpy as np
-
-    common_modules.append("np")
-except ImportError:
-    pass
-
-try:
-    import numpy.linalg as npl
-
-    common_modules.append("npl")
-except ImportError:
-    pass
-
-try:
-    import matplotlib.pyplot as plt
-
-    common_modules.append("plt")
-except ImportError:
-    pass
-
-try:
-    import scipy as sci
-
-    common_modules.append("sci")
-except ImportError:
-    pass
-
-try:
-    import pandas as pd
-
-    common_modules.append("pd")
-except ImportError:
-    pass
-
-
 # Class to store all informations and formatting
 class __PYTHONRC__:
     def __init__(self):
@@ -103,6 +65,15 @@ class __PYTHONRC__:
                 module_style,
                 divider_style,
             ),
+        )
+        common_modules = self.__import_modules(
+            {
+                "numpy": "np",
+                "numpy.linalg": "npl",
+                "matplotlib.pyplot": "plt",
+                "scipy": "sci",
+                "pandas": "pd",
+            }
         )
         if len(common_modules):
             runtime_info.add_row(
@@ -154,6 +125,20 @@ class __PYTHONRC__:
         with self.console.capture() as capture:
             self.console.print(rendable, end="")
         return capture.get()
+
+    def __import_modules(self, modules):
+        imported = []
+        for module, name in modules.items():
+            import_str = f"import {module}"
+            if name:
+                import_str += f" as {name}"
+            try:
+                exec(import_str, globals())
+            except ImportError:
+                pass
+            else:
+                imported.append(name or module)
+        return imported
 
     def __construct_runtime_info_row(
         _, key, values, key_style, value_style, divider_style
