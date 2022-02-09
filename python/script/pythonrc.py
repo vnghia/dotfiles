@@ -82,7 +82,7 @@ class __PYTHONRC__:
     def __rich_imported(self, table):
         for name in (
             "builtin_modules",
-            "common_modules",
+            "sci_modules",
             "rich_functions",
             "custom_functions",
         ):
@@ -124,7 +124,7 @@ class __PYTHONRC__:
     def __import_builtin_modules(self):
         return ["os", "platform", "sys", "Path"]
 
-    def __import_common_modules(self):
+    def __import_sci_modules(self):
         modules = {
             "numpy": ("np", None),
             "numpy.linalg": ("npl", None),
