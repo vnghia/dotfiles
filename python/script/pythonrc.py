@@ -29,91 +29,20 @@ except ImportError:
 
 # Formatting library
 sys.path.append(str(next(constants.PYVENV_LOCAL.glob("lib/python*/site-packages"))))
-import rich
-from rich import inspect as insp
-from rich import pretty, print
+from rich import pretty
 from rich import traceback as richtb
-from rich.console import Console
-from rich.panel import Panel
-from rich.pretty import pprint
-from rich.table import Table
-from rich.text import Text
 
 # Class to store all informations and formatting
 class __PYTHONRC__:
     def __init__(self):
         self.virtual_env = Path(os.environ.get("VIRTUAL_ENV", "global"))
         self.cwd = Path.cwd()
-        self.console = Console()
+
+        self.__import_rich_classes()
+        self.__construct_runtime_info()
 
         pretty.install()
         richtb.install()
-
-        runtime_info = Table.grid(expand=True)
-        runtime_info.add_column()
-        runtime_info.add_column()
-        divider_style = "color(45)"
-        key_style = "color(45)" + " bold"
-        function_style = "color(136)"
-        module_style = "color(70)"
-        runtime_info.add_row(Text("cwd", style=key_style), Text(f"{self.cwd}"))
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "builtin modules",
-                sorted(["os", "platform", "sys", "Path"]),
-                key_style,
-                module_style,
-                divider_style,
-            ),
-        )
-        common_modules = self.__import_modules(
-            {
-                "numpy": ("np", None),
-                "numpy.linalg": ("npl", None),
-                "matplotlib.pyplot": ("plt", None),
-                "scipy": ("sci", None),
-                "pandas": ("pd", None),
-            }
-        )
-        if len(common_modules):
-            runtime_info.add_row(
-                *self.__construct_runtime_info_row(
-                    "common modules",
-                    sorted(common_modules),
-                    key_style,
-                    module_style,
-                    divider_style,
-                )
-            )
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "rich functions",
-                sorted(["inspect as insp", "print", "pprint"]),
-                key_style,
-                function_style,
-                divider_style,
-            ),
-        )
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "custom functions",
-                sorted(["cd", "import_path"]),
-                key_style,
-                function_style,
-                divider_style,
-            ),
-        )
-
-        self.console.print(
-            Panel(
-                runtime_info,
-                title=Text.from_markup(
-                    f"[color(81)]{platform.python_version()} ~ {self.virtual_env.name}[/color(81)]",
-                    style="bold",
-                ),
-                style="color(81)",
-            )
-        )
 
         self.ps1 = self.__get_output_string(Text("--> ", style="color(81)"))
         self.ps2 = self.__get_output_string(Text("... ", style="color(24)"))
@@ -141,6 +70,99 @@ class __PYTHONRC__:
             else:
                 imported.append(name or module)
         return imported
+
+    def __import_rich_classes(self):
+        names = ["Console", "Panel", "Table", "Text"]
+        modules = {name: (None, f"rich.{name.lower()}") for name in names}
+        imported = self.__import_modules(modules)
+        assert len(imported) == len(modules)
+
+    def __import_rich_builtin(self):
+        root = "rich"
+        modules = {
+            "inspect": ("insp", root),
+            "print": (None, root),
+            "pprint": (None, f"{root}.pretty"),
+        }
+        imported = self.__import_modules(modules)
+        assert len(imported) == len(modules)
+        return imported
+
+    def __construct_runtime_info(self):
+        self.console = Console()
+
+        runtime_info = Table.grid(expand=True)
+        runtime_info.add_column()
+        runtime_info.add_column()
+
+        divider_style = "color(45)"
+        key_style = "color(45)" + " bold"
+        function_style = "color(136)"
+        module_style = "color(70)"
+
+        runtime_info.add_row(Text("cwd", style=key_style), Text(f"{self.cwd}"))
+
+        runtime_info.add_row(
+            *self.__construct_runtime_info_row(
+                "builtin modules",
+                sorted(["os", "platform", "sys", "Path"]),
+                key_style,
+                module_style,
+                divider_style,
+            ),
+        )
+
+        common_modules = self.__import_modules(
+            {
+                "numpy": ("np", None),
+                "numpy.linalg": ("npl", None),
+                "matplotlib.pyplot": ("plt", None),
+                "scipy": ("sci", None),
+                "pandas": ("pd", None),
+            }
+        )
+        if len(common_modules):
+            runtime_info.add_row(
+                *self.__construct_runtime_info_row(
+                    "common modules",
+                    sorted(common_modules),
+                    key_style,
+                    module_style,
+                    divider_style,
+                )
+            )
+
+        rich_functions = self.__import_rich_builtin()
+        runtime_info.add_row(
+            *self.__construct_runtime_info_row(
+                "rich functions",
+                sorted(rich_functions),
+                key_style,
+                function_style,
+                divider_style,
+            ),
+        )
+
+        runtime_info.add_row(
+            *self.__construct_runtime_info_row(
+                "custom functions",
+                sorted(["cd", "import_path"]),
+                key_style,
+                function_style,
+                divider_style,
+            ),
+        )
+
+        self.console.print(
+            Panel(
+                runtime_info,
+                title=Text.from_markup(
+                    f"[color(81)]{platform.python_version()} ~ {self.virtual_env.name}[/color(81)]",
+                    style="bold",
+                ),
+                style="color(81)",
+            )
+        )
 
     def __construct_runtime_info_row(
         _, key, values, key_style, value_style, divider_style
