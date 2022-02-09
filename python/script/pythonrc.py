@@ -46,22 +46,6 @@ class __PYTHONRC__:
 
         self.__init_sys_ps()
 
-    def __import_modules(self, modules):
-        imported = []
-        for module, (name, root) in modules.items():
-            import_str = f"import {module}"
-            if name:
-                import_str += f" as {name}"
-            if root:
-                import_str = f"from {root} " + import_str
-            try:
-                exec(import_str, globals())
-            except ImportError:
-                pass
-            else:
-                imported.append(name or module)
-        return imported
-
     def __import_rich_classes(self):
         names = ["Console", "Panel", "Table", "Text"]
         modules = {name: (None, f"rich.{name.lower()}") for name in names}
@@ -203,6 +187,22 @@ class __PYTHONRC__:
     # ---------------------------------------------------------------------------- #
     #                                    Utility                                   #
     # ---------------------------------------------------------------------------- #
+
+    def __import_modules(self, modules):
+        imported = []
+        for module, (name, root) in modules.items():
+            import_str = f"import {module}"
+            if name:
+                import_str += f" as {name}"
+            if root:
+                import_str = f"from {root} " + import_str
+            try:
+                exec(import_str, globals())
+            except ImportError:
+                pass
+            else:
+                imported.append(name or module)
+        return imported
 
     def __get_output_string(self, rendable):
         with self.console.capture() as capture:
