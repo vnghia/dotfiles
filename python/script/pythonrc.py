@@ -77,17 +77,6 @@ class __PYTHONRC__:
         imported = self.__import_modules(modules)
         assert len(imported) == len(modules)
 
-    def __import_rich_builtin(self):
-        root = "rich"
-        modules = {
-            "inspect": ("insp", root),
-            "print": (None, root),
-            "pprint": (None, f"{root}.pretty"),
-        }
-        imported = self.__import_modules(modules)
-        assert len(imported) == len(modules)
-        return imported
-
     def __construct_runtime_info(self):
         self.console = Console()
 
@@ -95,61 +84,21 @@ class __PYTHONRC__:
         runtime_info.add_column()
         runtime_info.add_column()
 
-        divider_style = "color(45)"
-        key_style = "color(45)" + " bold"
-        function_style = "color(136)"
-        module_style = "color(70)"
+        self.divider_style = "color(45)"
+        self.key_style = "color(45)" + " bold"
+        self.function_style = "color(136)"
+        self.module_style = "color(70)"
 
-        runtime_info.add_row(Text("cwd", style=key_style), Text(f"{self.cwd}"))
-
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "builtin modules",
-                sorted(["os", "platform", "sys", "Path"]),
-                key_style,
-                module_style,
-                divider_style,
-            ),
-        )
-
-        common_modules = self.__import_modules(
-            {
-                "numpy": ("np", None),
-                "numpy.linalg": ("npl", None),
-                "matplotlib.pyplot": ("plt", None),
-                "scipy": ("sci", None),
-                "pandas": ("pd", None),
-            }
-        )
-        if len(common_modules):
-            runtime_info.add_row(
-                *self.__construct_runtime_info_row(
-                    "common modules",
-                    sorted(common_modules),
-                    key_style,
-                    module_style,
-                    divider_style,
-                )
-            )
-
-        rich_functions = self.__import_rich_builtin()
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "rich functions",
-                sorted(rich_functions),
-                key_style,
-                function_style,
-                divider_style,
-            ),
-        )
+        runtime_info.add_row(Text("cwd", style=self.key_style), Text(f"{self.cwd}"))
+        self.__construct_runtime_imported_row(runtime_info)
 
         runtime_info.add_row(
             *self.__construct_runtime_info_row(
                 "custom functions",
                 sorted(["cd", "import_path"]),
-                key_style,
-                function_style,
-                divider_style,
+                self.key_style,
+                self.function_style,
+                self.divider_style,
             ),
         )
 
@@ -173,6 +122,43 @@ class __PYTHONRC__:
             vT.append(value, style=value_style).append(" | ", style=divider_style)
         vT.append(values[-1], style=value_style)
         return kT, vT
+
+    def __construct_runtime_imported_row(self, table):
+        for name in ("builtin_modules", "common_modules", "rich_functions"):
+            imported = getattr(self, f"{self.__class__.__name__[1:]}__import_{name}")()
+            if imported:
+                style = self.module_style if "modules" in name else self.function_style
+                table.add_row(
+                    *self.__construct_runtime_info_row(
+                        name.replace("_", " "),
+                        sorted(imported),
+                        self.key_style,
+                        style,
+                        self.divider_style,
+                    ),
+                )
+
+    def __import_builtin_modules(self):
+        return ["os", "platform", "sys", "Path"]
+
+    def __import_common_modules(self):
+        modules = {
+            "numpy": ("np", None),
+            "numpy.linalg": ("npl", None),
+            "matplotlib.pyplot": ("plt", None),
+            "scipy": ("sci", None),
+            "pandas": ("pd", None),
+        }
+        return self.__import_modules(modules)
+
+    def __import_rich_functions(self):
+        root = "rich"
+        modules = {
+            "inspect": ("insp", root),
+            "print": (None, root),
+            "pprint": (None, f"{root}.pretty"),
+        }
+        return self.__import_modules(modules)
 
     def cd(self, path):
         path = os.path.expandvars(os.path.expanduser(path))
