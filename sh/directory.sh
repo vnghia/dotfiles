@@ -35,3 +35,6 @@ export CODE_BIN="$CODE_LOCAL/global_bin"
 export PYVENV_HOME="$CODE_HOME/.pyvenv"
 export PYVENV_LOCAL="$PYVENV_HOME/.local"
 export PYVENV_BIN="$PYVENV_LOCAL/global_bin"
+
+# Math
+export MATH_HOME="${MATH_HOME:-$HOME/math}"
