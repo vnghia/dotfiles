@@ -85,6 +85,7 @@ class __PYTHONRC__:
             "sci_modules",
             "rich_functions",
             "custom_functions",
+            "shortcut_modules",
         ):
             imported = getattr(self, f"{self.__class__.__name__[1:]}__import_{name}")()
             if imported:
@@ -125,13 +126,7 @@ class __PYTHONRC__:
         return ["os", "platform", "sys", "Path"]
 
     def __import_sci_modules(self):
-        modules = {
-            "numpy": ("np", None),
-            "numpy.linalg": ("npl", None),
-            "matplotlib.pyplot": ("plt", None),
-            "scipy": ("sci", None),
-            "pandas": ("pd", None),
-        }
+        modules = {"numpy": ("np", None)}
         return self.__import_modules(modules)
 
     def __import_rich_functions(self):
@@ -200,6 +195,23 @@ class __PYTHONRC__:
     def on(self, venv):
         source = self.virtual_home / venv / "bin" / "activate"
         os.execlp("sh", "sh", "-c", f". {source} && python3")
+
+    # ------------------------------ Shortcut import ----------------------------- #
+
+    def __import_shortcut_modules(self):
+        shortcut_modules = ["sci", "plt", "pd"]
+        for funcname in shortcut_modules:
+            globals()[funcname] = getattr(self, funcname)
+        return shortcut_modules
+
+    def sci(self):
+        self.__import_modules({"scipy": ("sci", None)})
+
+    def plt(self):
+        self.__import_modules({"matplotlib.pyplot": ("plt", None)})
+
+    def pd(self):
+        self.__import_modules({"pandas": ("pd", None)})
 
     # ---------------------------------------------------------------------------- #
     #                                    Utility                                   #
