@@ -16,6 +16,8 @@ CODE_HOME = Path(os.environ["CODE_HOME"])
 CODE_LOCAL = Path(os.environ["CODE_LOCAL"])
 CODE_BIN = Path(os.environ["CODE_BIN"])
 
+MATH_HOME = Path(os.environ["MATH_HOME"])
+
 PYVENV_HOME = Path(os.environ["PYVENV_HOME"])
 PYVENV_LOCAL = Path(os.environ["PYVENV_LOCAL"])
 PYVENV_BIN = Path(os.environ["PYVENV_BIN"])

@@ -304,6 +304,7 @@
   # For example, given these settings:
   #
   typeset -g POWERLEVEL9K_DIR_CLASSES=(
+    "$MATH_HOME(|/*)"     MATH_HOME       '%Bπ%b'
     "$CODE_HOME(|/*)"     CODE_HOME       '%B</>%b'
     "$DOTFILES_HOME(|/*)" DOTFILES_HOME   '%B⭘%b'
     '~'                   HOME            ''
