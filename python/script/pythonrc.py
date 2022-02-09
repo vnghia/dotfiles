@@ -200,28 +200,6 @@ import_path = __pythonrc__.import_path
 q = exit
 
 
-## Execute python function with the same syntax as shell
-SHELL_SYNTAX_MAP = {"cd": cd}
-
-original_hook = sys.excepthook
-
-
-def shellsyntaxhook(type, value, traceback):
-    if type == SyntaxError:
-        try:
-            args = value.text.strip("\n").strip(" ").split(" ")
-            command = args[0]
-            if command in SHELL_SYNTAX_MAP:
-                SHELL_SYNTAX_MAP[command](*args[1:])
-                return
-        except BaseException as e:
-            original_hook(e.__class__, e, e.__traceback__)
-    original_hook(type, value, traceback)
-
-
-sys.excepthook = shellsyntaxhook
-
-
 del __PYTHONRC__
 
 sys.path.pop()
