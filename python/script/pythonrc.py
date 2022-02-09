@@ -38,6 +38,7 @@ class __PYTHONRC__:
             str(next(constants.PYVENV_LOCAL.glob("lib/python*/site-packages")))
         )
         self.virtual_env = Path(os.environ.get("VIRTUAL_ENV", "global"))
+        self.virtual_home = constants.PYVENV_HOME
         self.cwd = Path.cwd()
 
         self.__init_rich()
@@ -160,7 +161,7 @@ class __PYTHONRC__:
     # ---------------------------------------------------------------------------- #
 
     def __import_custom_functions(self):
-        custom_functions = ["cd", "import_path"]
+        custom_functions = ["cd", "import_path", "on"]
         for funcname in custom_functions:
             globals()[funcname] = getattr(self, funcname)
         custom_shortcuts = {"q": exit}
@@ -195,6 +196,10 @@ class __PYTHONRC__:
             globals()[arg] = getattr(module, arg)
         sys.path.pop()
         return module
+
+    def on(self, venv):
+        source = self.virtual_home / venv / "bin" / "activate"
+        os.execlp("sh", "sh", "-c", f". {source} && python3")
 
     # ---------------------------------------------------------------------------- #
     #                                    Utility                                   #
