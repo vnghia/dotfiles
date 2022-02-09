@@ -92,16 +92,6 @@ class __PYTHONRC__:
         runtime_info.add_row(Text("cwd", style=self.key_style), Text(f"{self.cwd}"))
         self.__construct_runtime_imported_row(runtime_info)
 
-        runtime_info.add_row(
-            *self.__construct_runtime_info_row(
-                "custom functions",
-                sorted(["cd", "import_path"]),
-                self.key_style,
-                self.function_style,
-                self.divider_style,
-            ),
-        )
-
         self.console.print(
             Panel(
                 runtime_info,
@@ -124,7 +114,12 @@ class __PYTHONRC__:
         return kT, vT
 
     def __construct_runtime_imported_row(self, table):
-        for name in ("builtin_modules", "common_modules", "rich_functions"):
+        for name in (
+            "builtin_modules",
+            "common_modules",
+            "rich_functions",
+            "custom_functions",
+        ):
             imported = getattr(self, f"{self.__class__.__name__[1:]}__import_{name}")()
             if imported:
                 style = self.module_style if "modules" in name else self.function_style
@@ -160,6 +155,19 @@ class __PYTHONRC__:
         }
         return self.__import_modules(modules)
 
+    # ---------------------------------------------------------------------------- #
+    #                               Custom functions                               #
+    # ---------------------------------------------------------------------------- #
+
+    def __import_custom_functions(self):
+        custom_functions = ["cd", "import_path"]
+        for funcname in custom_functions:
+            globals()[funcname] = getattr(self, funcname)
+        custom_shortcuts = {"q": exit}
+        for shortcut, func in custom_shortcuts.items():
+            globals()[shortcut] = func
+        return custom_functions + list(custom_shortcuts.keys())
+
     def cd(self, path):
         path = os.path.expandvars(os.path.expanduser(path))
         new_path = self.cwd / path
@@ -192,11 +200,6 @@ class __PYTHONRC__:
 __pythonrc__ = __PYTHONRC__()
 sys.ps1 = __pythonrc__.ps1
 sys.ps2 = __pythonrc__.ps2
-
-# Shortcuts
-cd = __pythonrc__.cd
-import_path = __pythonrc__.import_path
-q = exit
 
 
 del __PYTHONRC__
