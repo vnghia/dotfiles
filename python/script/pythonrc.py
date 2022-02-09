@@ -44,16 +44,7 @@ class __PYTHONRC__:
         pretty.install()
         richtb.install()
 
-        self.ps1 = self.__get_output_string(Text("--> ", style="color(81)"))
-        self.ps2 = self.__get_output_string(Text("... ", style="color(24)"))
-        if sys.platform != "win32":
-            self.ps1 = self.ps1.replace("\x1b", "\x01\x1b").replace("m", "m\x02")
-            self.ps2 = self.ps2.replace("\x1b", "\x01\x1b").replace("m", "m\x02")
-
-    def __get_output_string(self, rendable):
-        with self.console.capture() as capture:
-            self.console.print(rendable, end="")
-        return capture.get()
+        self.__init_sys_ps()
 
     def __import_modules(self, modules):
         imported = []
@@ -156,6 +147,19 @@ class __PYTHONRC__:
         return self.__import_modules(modules)
 
     # ---------------------------------------------------------------------------- #
+    #                                    PS1/PS2                                   #
+    # ---------------------------------------------------------------------------- #
+
+    def __init_sys_ps(self):
+        self.ps1 = self.__get_output_string(Text("--> ", style="color(81)"))
+        self.ps2 = self.__get_output_string(Text("... ", style="color(24)"))
+        if sys.platform != "win32":
+            self.ps1 = self.ps1.replace("\x1b", "\x01\x1b").replace("m", "m\x02")
+            self.ps2 = self.ps2.replace("\x1b", "\x01\x1b").replace("m", "m\x02")
+        sys.ps1 = self.ps1
+        sys.ps2 = self.ps2
+
+    # ---------------------------------------------------------------------------- #
     #                               Custom functions                               #
     # ---------------------------------------------------------------------------- #
 
@@ -195,6 +199,15 @@ class __PYTHONRC__:
             globals()[arg] = getattr(module, arg)
         sys.path.pop()
         return module
+
+    # ---------------------------------------------------------------------------- #
+    #                                    Utility                                   #
+    # ---------------------------------------------------------------------------- #
+
+    def __get_output_string(self, rendable):
+        with self.console.capture() as capture:
+            self.console.print(rendable, end="")
+        return capture.get()
 
 
 __pythonrc__ = __PYTHONRC__()
