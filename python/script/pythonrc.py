@@ -165,13 +165,17 @@ class __PYTHONRC__:
         assert Path.cwd() == self.cwd
         self.console.print(Text(f"cwd: {str(self.cwd)}", "color(45)"))
 
-    def import_path(self, path, name=None):
+    def import_path(self, path, *nargs, name=None):
         module_path = (self.cwd / os.path.expandvars(path)).resolve()
+        sys.path.append(str(module_path.parent))
         module_name = name or module_path.stem
         spec = importlib.util.spec_from_file_location(module_name, module_path)
         module = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = module
         spec.loader.exec_module(module)
+        for arg in nargs:
+            globals()[arg] = getattr(module, arg)
+        sys.path.pop()
         return module
 
 
