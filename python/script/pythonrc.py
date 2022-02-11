@@ -199,7 +199,7 @@ class __PYTHONRC__:
     # ------------------------------ Shortcut import ----------------------------- #
 
     def __import_shortcut_modules(self):
-        shortcut_modules = ["sci", "plt", "pd"]
+        shortcut_modules = ["sci", "plt", "pd", "npl"]
         for funcname in shortcut_modules:
             globals()[funcname] = getattr(self, funcname)
         return shortcut_modules
@@ -212,6 +212,9 @@ class __PYTHONRC__:
 
     def pd(self):
         self.__import_modules({"pandas": ("pd", None)})
+
+    def npl(self):
+        self.__import_modules({"numpy.linalg": ("npl", None)})
 
     # ---------------------------------------------------------------------------- #
     #                                    Utility                                   #
