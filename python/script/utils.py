@@ -1,3 +1,6 @@
+import shutil
+import sys
+
 # ---------------------------------------------------------------------------- #
 #                                    String                                    #
 # ---------------------------------------------------------------------------- #
@@ -25,3 +28,16 @@ def remove_postfix(string, postfix):
     if string and string.endswith(postfix):
         string = string[: -len(postfix)]
     return string
+
+
+# ---------------------------------------------------------------------------- #
+#                                   PLatform                                   #
+# ---------------------------------------------------------------------------- #
+
+
+def is_android():
+    return shutil.which("termux-setup-storage") is not None
+
+
+def platform():
+    return "android" if is_android() else sys.platform

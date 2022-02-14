@@ -4,6 +4,7 @@ import argparse
 import shutil
 
 import pyvenv
+import utils
 from constants import (
     DOTFILES_PYTHON_REQUIREMENTS_DOTFILES,
     PYVENV_BIN,
@@ -24,6 +25,10 @@ def setup_localvenv(python=None, init=None):
     pyvenv.install(
         PYVENV_LOCAL, rs=[DOTFILES_PYTHON_REQUIREMENTS_DOTFILES / "requirements.txt"]
     )
+    for f in DOTFILES_PYTHON_REQUIREMENTS_DOTFILES.glob("not.*.txt"):
+        platforms = f.name.split(".")[1:-1]
+        if utils.platform() not in platforms:
+            pyvenv.install(PYVENV_LOCAL, rs=[f])
 
 
 def main():

@@ -1,0 +1,5 @@
+# tools
+mypy==0.931
+black==22.1.0
+flake8==4.0.1
+httpie==3.0.2
