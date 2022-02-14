@@ -3,6 +3,7 @@
 import importlib
 import os
 import platform
+import subprocess
 import sys
 from pathlib import Path
 
@@ -123,7 +124,7 @@ class __PYTHONRC__:
     # ---------------------------------------------------------------------------- #
 
     def __import_builtin_modules(self):
-        return ["os", "platform", "sys", "Path"]
+        return ["os", "platform", "sys", "Path", "subprocess"]
 
     def __import_sci_modules(self):
         modules = {"numpy": ("np", None)}
@@ -156,7 +157,7 @@ class __PYTHONRC__:
     # ---------------------------------------------------------------------------- #
 
     def __import_custom_functions(self):
-        custom_functions = ["cd", "import_path", "on"]
+        custom_functions = ["cd", "import_path", "on", "run", "sh"]
         for funcname in custom_functions:
             globals()[funcname] = getattr(self, funcname)
         custom_shortcuts = {"q": exit}
@@ -195,6 +196,16 @@ class __PYTHONRC__:
     def on(self, venv):
         source = self.virtual_home / venv / "bin" / "activate"
         os.execlp("sh", "sh", "-c", f". {source} && python3")
+
+    def run(self, command, **kwargs):
+        if isinstance(command, str):
+            command = command.split(" ")
+        return subprocess.run(command, **kwargs)
+
+    def sh(self, command, **kwargs):
+        if not isinstance(command, str):
+            command = " ".join(command)
+        return subprocess.run(command, **kwargs, shell=True)
 
     # ------------------------------ Shortcut import ----------------------------- #
 
