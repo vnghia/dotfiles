@@ -21,10 +21,13 @@ def link_to_global_bin(bin_path):
         ):
             dest_path = PYVENV_BIN / bin.name
             if not dest_path.exists():
-                if sys.version_info[1] < 10:
-                    (bin_path / bin).link_to(dest_path)
-                else:
-                    dest_path.hardlink_to(bin_path / bin)
+                try:
+                    if sys.version_info[1] < 10:
+                        (bin_path / bin).link_to(dest_path)
+                    else:
+                        dest_path.hardlink_to(bin_path / bin)
+                except NotImplementedError:
+                    break
 
 
 def make(venv=None, python=None, options=None):
