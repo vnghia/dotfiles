@@ -61,3 +61,6 @@ rbtd = rb --edit-todo
 rbc = -c core.editor=true rb --continue
 rbr = rbi --root
 rbh = "!git rbi HEAD~$1 #"
+
+# Profile
+pr = "!git_profile.py"

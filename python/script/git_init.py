@@ -28,6 +28,7 @@ def main():
     parser.add_argument("-l", "--local", action="store_true")
     args = parser.parse_args()
     git_init(args.branch, args.local)
+    print("Please call git pr !")
 
 
 if __name__ == "__main__":
