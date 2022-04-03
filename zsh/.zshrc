@@ -21,7 +21,6 @@ plugins=(
   zsh-autosuggestions
   sudo
   web-search
-  copydir
   copyfile
   history
 )
