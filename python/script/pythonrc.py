@@ -55,7 +55,8 @@ class __PYTHONRC__:
         from rich import traceback as richtraceback
 
         richpretty.install()
-        richtraceback.install()
+        if not ("VSCODE_PID" in os.environ or "VSCODE_CWD" in os.environ):
+            richtraceback.install()
         del richpretty
         del richtraceback
 
