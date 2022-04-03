@@ -26,6 +26,7 @@ plugins=(
   history
 )
 
+export DISABLE_AUTO_UPDATE="true"
 source $ZSH/oh-my-zsh.sh
 
 # Powerlevel10k
