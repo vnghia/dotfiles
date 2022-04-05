@@ -161,7 +161,7 @@ class __PYTHONRC__:
         custom_functions = ["cd", "import_path", "on", "run", "sh"]
         for funcname in custom_functions:
             globals()[funcname] = getattr(self, funcname)
-        custom_shortcuts = {"q": exit}
+        custom_shortcuts = {"q": self.Quitter()}
         for shortcut, func in custom_shortcuts.items():
             globals()[shortcut] = func
         return custom_functions + list(custom_shortcuts.keys())
@@ -207,6 +207,10 @@ class __PYTHONRC__:
         if not isinstance(command, str):
             command = " ".join(command)
         return subprocess.run(command, **kwargs, shell=True)
+
+    class Quitter:
+        def __repr__(self):
+            sys.exit(0)
 
     # ------------------------------ Shortcut import ----------------------------- #
 
