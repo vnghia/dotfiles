@@ -36,3 +36,6 @@ source $ZDOTDIR/.highlight.zsh
 
 # Source config in the end !
 source "$ZDOTDIR/config.zsh"
+
+# direnv
+eval "$(direnv hook zsh)"
