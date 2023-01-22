@@ -1,11 +1,11 @@
+# Source activate firstmost !
+source "$ZDOTDIR/activate.zsh"
+
 # Powerlevel10k
 ## Hook direnv
 (( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
 source $ZDOTDIR/.p10k.instant-prompt
 (( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
-
-# Source activate firstmost !
-source "$ZDOTDIR/activate.zsh"
 
 # Oh-my-zsh
 export ZSH="$ZDOTDIR/.oh-my-zsh"
